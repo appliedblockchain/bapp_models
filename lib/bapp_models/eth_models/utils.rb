@@ -5,7 +5,7 @@ module BAppModels
     end
 
     def resource
-      Inf.pluralize model_name
+      Inflecto.pluralize model_name
     end
 
     alias :collection_name :resource

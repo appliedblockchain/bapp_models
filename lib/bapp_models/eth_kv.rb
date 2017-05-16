@@ -1,5 +1,7 @@
 # exposes a key-value owner contract access by mimicking the redis API
 
+require 'redis'
+
 # use ethereum (key value / KVOwner contracts) as you use redis:
 #
 # R = Redis.new
@@ -8,7 +10,7 @@
 # R.set "foo", "baz"  #=> true
 # R["foo"] = "baz"
 #
-# ETH = EthKV
+# ETH = EthKV.new
 # ETH.get "foo"         #=> "bar"
 # ETH["foo"]            #=> "bar"
 # ETH.set "foo", "baz"  #=> true
@@ -34,7 +36,7 @@ module BAppModels
       # centralized / distributed (master-master replication) redis is used to get a list of all the available keys in the system - this list can be checked against a list reconstructed by
       @redis = Redis.new db: db
 
-      @logger = Log.new :eth_kv
+      @logger = self.class.logger
     end
 
     public
@@ -77,6 +79,20 @@ module BAppModels
 
     def log(message)
       @logger.log message
+    end
+
+    private
+
+    def self.logger
+      if defined? Log
+        Log.new :eth_kv
+      else
+        return @@logger if defined? @@logger
+        require 'logger'
+        @@logger = Logger.new ENV["LOGGER"] || STDOUT
+        def @@logger.log(message); info message; end
+        @@logger
+      end
     end
 
   end

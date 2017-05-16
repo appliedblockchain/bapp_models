@@ -16,7 +16,7 @@ module BAppModels
 
     def resource
       model_name = self.class.name.downcase
-      Inf.pluralize model_name
+      Inflecto.pluralize model_name
     end
   end
 end

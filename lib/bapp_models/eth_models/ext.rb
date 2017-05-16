@@ -29,9 +29,9 @@ module BAppModels
       obj
     end
 
-    def update(id, *attrs)
+    def update(id, attrs)
       resource = get id
-      resource.update Hash[attrs]
+      resource.update attrs
     end
 
     private

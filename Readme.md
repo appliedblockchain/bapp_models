@@ -37,7 +37,7 @@ class Document < EthModel
 
   def calc_hash
     # probably you want to do something like: Digest::SHA.hexdigest content (probably in initialize)
-    hash = contents.reverse
+    self.hash = contents.reverse
   end
 end
 
@@ -73,7 +73,7 @@ R["foo"]            #=> "bar"
 R.set "foo", "baz"  #=> true
 R["foo"] = "baz"
 
-ETH = EthKV
+ETH = EthKV.new
 ETH.get "foo"         #=> "bar"
 ETH["foo"]            #=> "bar"
 ETH.set "foo", "baz"  #=> true
