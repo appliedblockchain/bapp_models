@@ -1,3 +1,7 @@
+require 'virtus'
+require 'oj'
+require 'inflecto'
+
 require_relative 'eth_models/utils'
 require_relative 'eth_models/mixin'
 require_relative 'eth_models/ext'
