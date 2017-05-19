@@ -47,6 +47,8 @@ doc = Document.new name: "Foo", contents: "Bar123"
 doc.name      #=> "foo"
 doc.calc_hash #=> "..."
 doc.save      # (data should be saved into ethereum)
+# at the moment let's use this version:
+doc.update(doc.attributes)
 
 # you can retrieve data from Ethereum
 #
