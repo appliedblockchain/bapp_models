@@ -26,6 +26,8 @@ module BAppModels
     # we use a shared contract to store indices and all the values that are modified "together" (log is enough) - there's no owner check in this case
     CONTRACT_SHARED  = :key_value
 
+    ETH_KV_REDIS = ENV["ETH_KV_REDIS"] == "0"
+
     def_delegators :logger, :log
 
     def initialize(db: 1, shared: false)
@@ -34,7 +36,8 @@ module BAppModels
       @contract = CONTRACT_SHARED if shared
 
       # centralized / distributed (master-master replication) redis is used to get a list of all the available keys in the system - this list can be checked against a list reconstructed by
-      @redis = Redis.new db: db
+
+      @redis = Redis.new db: db if ETH_KV_REDIS
 
       @logger = self.class.logger
     end
@@ -58,7 +61,7 @@ module BAppModels
     def []=(key, value)
       # TODO: log "SET: #{key.inspect}: #{truncate value.inspect[0..100]}..." if @log
       log "SET: #{key.inspect}: #{value.inspect[0..100]} #{value.inspect.size > 99 ? "(...)" : "" }" if @log
-      @redis[key] = "1"
+      @redis[key] = "1" if ETH_KV_REDIS
       value = value.to_s
       # optional gzip here
       log "SET (raw): #{key.inspect}: #{value}" if @log
@@ -71,6 +74,7 @@ module BAppModels
     end
 
     def keys(pattern="*")
+      raise "EthKV #keys method is disabled - please unset your environment variable ETH_KV_REDIS" unless ETH_KV_REDIS
       @redis.keys pattern
     end
 
