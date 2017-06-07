@@ -16,7 +16,7 @@ module BAppModels
       data = ETH["#{resource}:#{id}"]
       return unless data
       # PSEUDO CODE:
-      # data = PrivacyAsym.decrypt data
+      # data = PrivacyEC.decrypt data
       data = Oj.load data
       new data
     end
@@ -26,7 +26,7 @@ module BAppModels
       attrs.merge! id: id
       obj  = new attrs
       data = Oj.dump obj.attributes
-      # data = PrivacyAsym.encrypt data
+      data = PrivacyEC.encrypt data
       ETH["#{resource}:#{id}"] = data
       obj
     end

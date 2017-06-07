@@ -1,5 +1,13 @@
-# privacy via asymmetric encryption via ECDSA (public key cryptography) - Elliptic Curves - bitcoin secp-k1 (secp-256-k1) via c lib/bindings - TODO secp-zk-snarks
+require "sha3"
+require 'ffi'
 
+require 'rlp'
+
+
+require_relative 'vendor/ecc/ecc_crypto'
+
+
+# privacy via asymmetric encryption via ECDSA (public key cryptography) - Elliptic Curves - bitcoin secp-k1 (secp-256-k1) via c lib/bindings - TODO secp-zk-snarks
 
 # in your Gemfile
 #
@@ -13,12 +21,12 @@ class PrivacyEC
 
   module ClassMethods
 
-    def decrypt_value(encrypted_value)
+    def decrypt(encrypted_value)
       key_ecc = private_key_wrap
       key_ecc.ecies_decrypt encrypted_value
     end
 
-    def encrypt_value(value, public_key: own_public_key)
+    def encrypt(value, public_key: own_public_key)
       ECC_Crypto::ECIES.encrypt value, public_key
     end
 

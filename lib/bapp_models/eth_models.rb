@@ -6,9 +6,13 @@ require_relative 'eth_models/utils'
 require_relative 'eth_models/mixin'
 require_relative 'eth_models/ext'
 
+# keychain
+require_relative '../keychain/keychain'
+
 # +privacy
 require_relative 'eth_models/ext_priv'
-
+# ---
+require_relative '../privacy/privacy_ec'
 
 module BAppModels
   class EthModel

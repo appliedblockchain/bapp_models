@@ -1,3 +1,5 @@
+# Privacy with shared secret (old impl.)
+
 require "openssl"
 require 'securerandom'
 require "base64" # for handling iv only

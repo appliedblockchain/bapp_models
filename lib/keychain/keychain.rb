@@ -3,18 +3,26 @@ require 'bitcoin'
 
 # Keypair keychain
 
-module RC
 class Keychain
 
   include Singleton
 
-  attr_reader :private_key, :public_key, :address 
+  attr_reader :private_key, :public_key, :address
 
-  def initialize(private_key = nil, key_path: nil)
+  def initialize(private_key = nil)
+    key_path = File.expand_path "#{self.class.keychain_dir}/private_key.key"
     @key_path    = key_path
     @private_key = private_key || load_or_generate_key
     @public_key  = derive_public  priv_key: @private_key
     @address     = derive_address pub_key:  @public_key
+  end
+
+  def self.keychain_dir
+    ENV["KEYCHAIN_DEFAULT_DIR"] || "~/.keychain/"
+  end
+
+  def self.setup
+    `mkdir -p #{File.expand_path keychain_dir}`
   end
 
   def self.current
@@ -89,7 +97,6 @@ class Keychain
     Bitcoin.hash160_to_address Bitcoin.hash160 pub_key
   end
 
-end
 end
 
 # notes: moving forward -> https://github.com/appliedblockchain/bapp3/blob/master/projects/futures/lib/keypair_ext.rb (hd keys for pseudonimity - #privacy)
