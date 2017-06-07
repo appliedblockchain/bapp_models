@@ -36,8 +36,11 @@ Gem::Specification.new do |spec|
   # sha3
   spec.add_runtime_dependency "sha3",   "~> 1.0.1"
 
+  # bitcoin-secp256k1
+  spec.add_runtime_dependency "bitcoin-secp256k1",  "~> 0.4.0"
+
   # keychain
-  spec.add_runtime_dependency "bitcoin-ruby",   "= 0.0.10"
+  spec.add_runtime_dependency "bitcoin-ruby",       "= 0.0.10"
 
   # privacy
   # TODO: remove dependency RLP (easy w/o vendorizing it)

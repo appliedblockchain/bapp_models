@@ -23,6 +23,16 @@ RSpec.describe EthModel do
     # include ethmodel
   end
 
+  specify "quick keychain pvt key check" do
+    # Keychain.setup (already run)
+    key = Keychain.current.public_key
+    Singleton.__init__ Keychain # this reinitializes the singleton
+    Keychain.current.public_key.should == key
+    `rm -f #{File.expand_path "~/.keychain/private_key.key"}`
+    Singleton.__init__ Keychain
+    Keychain.current.public_key.should_not == key
+  end
+
   specify "model attributes" do
     doc = Document.new
     doc.name.should be_nil
@@ -37,7 +47,10 @@ RSpec.describe EthModel do
     doc.name.should eq "test"
 
     doc = Document.get_raw 1
-    doc.name.should eq "!@!!"
+    doc.name.should be_nil
+
+    doc.raw.should_not be_nil
+    doc.raw.should     be_a String
   end
 
 end
