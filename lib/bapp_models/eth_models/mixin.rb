@@ -5,6 +5,8 @@ module BAppModels
     def save
       unless id
         self.class.create self.attributes
+      else
+        raise "TODO: implement save for update"
       end
     end
 

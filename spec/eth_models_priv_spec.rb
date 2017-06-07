@@ -27,9 +27,14 @@ RSpec.describe EthModel do
     doc = Document.new
     doc.name.should be_nil
     doc.name = "test"
+    doc.name.should eq "test"
     doc.save
+    doc.name.should eq "test"
 
-    doc.name.should     eq "test"
+    Document.count.should be 1
+
+    doc = Document.get  1
+    doc.name.should eq "test"
 
     doc = Document.get_raw 1
     doc.name.should eq "!@!!"
