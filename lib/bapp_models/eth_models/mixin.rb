@@ -6,8 +6,11 @@ module BAppModels
       klass = self.class
       model = klass.get id
       attrs = model.attributes
-      # attrs_new = PrivacyAsym.encrypt attrs_new
-      attrs.merge! attrs_new
+      attrs_priv = []
+      # attrs.each |name, value|
+      #   attrs_priv[name] = PrivacyAsym.encrypt value
+      # end
+      attrs.merge! attrs_priv
       obj   = klass.new attrs
       data  = Oj.dump obj.attributes
       ETH["#{self.class.resource}:#{id}"] = data

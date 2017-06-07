@@ -6,13 +6,19 @@ require 'bitcoin'
 module RC
 class Keychain
 
-  attr_reader :public_key, :address, :private_key
+  include Singleton
+
+  attr_reader :private_key, :public_key, :address 
 
   def initialize(private_key = nil, key_path: nil)
     @key_path    = key_path
     @private_key = private_key || load_or_generate_key
     @public_key  = derive_public  priv_key: @private_key
     @address     = derive_address pub_key:  @public_key
+  end
+
+  def self.current
+    Keychain.instance
   end
 
   def load_or_generate_key

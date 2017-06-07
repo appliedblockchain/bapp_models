@@ -88,5 +88,9 @@ RSpec.describe EthModel do
       doc.name.should == "aloha"
     end
 
+    xspecify "save" do
+      # TODO: spec save
+    end
+
   end
 end
