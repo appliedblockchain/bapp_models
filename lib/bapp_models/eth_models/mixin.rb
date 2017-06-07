@@ -2,6 +2,12 @@
 module BAppModels
   module EthModelMixin
 
+    def save
+      unless id
+        self.class.create self.attributes
+      end
+    end
+
     def update(attrs_new)
       klass = self.class
       model = klass.get id

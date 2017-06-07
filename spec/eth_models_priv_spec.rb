@@ -2,6 +2,11 @@ require "spec_helper"
 
 RSpec.describe EthModel do
 
+  def db_clear
+    Redis.new(db: 11).flushdb
+    Redis.new(db: 12).flushdb
+  end
+
   class Document < EthModel
     eth_model
 
@@ -10,8 +15,7 @@ RSpec.describe EthModel do
   end
 
   before :all do
-    Redis.new(db: 11).flushdb
-    Redis.new(db: 12).flushdb
+    db_clear
   end
 
   specify "EthModel" do
@@ -21,9 +25,14 @@ RSpec.describe EthModel do
 
   specify "model attributes" do
     doc = Document.new
+    doc.name.should be_nil
+    doc.name = "test"
     doc.save
 
+    doc.name.should     eq "test"
 
+    doc = Document.get_raw 1
+    doc.name.should eq "!@!!"
   end
 
 end

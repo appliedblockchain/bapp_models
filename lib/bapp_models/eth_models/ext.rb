@@ -1,4 +1,3 @@
-
 module BAppModels
   module EthModelExt
     include EthModelUtils
