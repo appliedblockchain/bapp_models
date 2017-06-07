@@ -1,7 +1,8 @@
 PATH
   remote: .
   specs:
-    bapp_models (0.2.0)
+    bapp_models (0.2.2)
+      bitcoin-ruby (= 0.0.10)
       inflecto (= 0.0.2)
       oj (~> 3.0)
       redis (~> 3.3)
@@ -14,6 +15,7 @@ GEM
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
       thread_safe (~> 0.3, >= 0.3.1)
+    bitcoin-ruby (0.0.10)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     descendants_tracker (0.0.4)
@@ -22,7 +24,7 @@ GEM
     equalizer (0.0.11)
     ice_nine (0.11.2)
     inflecto (0.0.2)
-    oj (3.0.7)
+    oj (3.1.0)
     rake (10.5.0)
     redis (3.3.3)
     rspec (3.6.0)

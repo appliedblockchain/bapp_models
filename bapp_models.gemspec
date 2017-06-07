@@ -30,6 +30,13 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  # keychain
+  spec.add_runtime_dependency "bitcoin-ruby",   "= 0.0.10"
+
+  # privacy
+  # spec.add_runtime_dependency "",   ""
+
+  # models
   spec.add_runtime_dependency "virtus",   "~> 1.0"   # .5
   spec.add_runtime_dependency "redis",    "~> 3.3"   # .3
   spec.add_runtime_dependency "oj",       "~> 3.0"   # .7
