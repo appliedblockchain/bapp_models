@@ -21,6 +21,8 @@ class PrivacyEC
 
   SHA = SHA3::Digest   # sha3
 
+  LOG = false
+
   module ClassMethods
 
     def decrypt(encrypted_value)
@@ -79,6 +81,7 @@ class PrivacyEC
     end
 
     def log(msg)
+      return unless LOG
       puts msg
       puts
     end
