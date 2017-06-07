@@ -6,6 +6,7 @@ module BAppModels
       klass = self.class
       model = klass.get id
       attrs = model.attributes
+      # attrs_new = PrivacyAsym.encrypt attrs_new
       attrs.merge! attrs_new
       obj   = klass.new attrs
       data  = Oj.dump obj.attributes
