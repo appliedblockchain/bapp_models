@@ -136,3 +136,12 @@ class Blocks
   end
 
 end
+
+# usage (decode and decrypt all the transactions of the latest block):
+#
+# block = Blocks.all.last
+# txs = block.fetch :transactions
+# for tx in txs
+#   tx_data = Blocks::Transaction.read tx: tx, format: :kv_hash_decrypted
+#   puts tx_data
+# end
