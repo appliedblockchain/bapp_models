@@ -1,7 +1,14 @@
+GIT
+  remote: https://0cc2cbe34f429d9ef04791732545a9079963653c@github.com/appliedblockchain/ethereum
+  revision: 1a3860cb513c97dd44aa1b06efffd6967da8773b
+  specs:
+    ethereum (0.4.2)
+      digest-sha3
+
 PATH
   remote: .
   specs:
-    bapp_models (0.2.2)
+    bapp_models (0.2.3)
       bitcoin-ruby (= 0.0.10)
       bitcoin-secp256k1 (~> 0.4.0)
       ffi (~> 1.9.18)
@@ -27,11 +34,12 @@ GEM
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.3)
+    digest-sha3 (1.1.0)
     equalizer (0.0.11)
     ffi (1.9.18)
     ice_nine (0.11.2)
     inflecto (0.0.2)
-    oj (3.1.0)
+    oj (3.1.3)
     rake (10.5.0)
     redis (3.3.3)
     rlp (0.7.3)
@@ -62,8 +70,9 @@ PLATFORMS
 DEPENDENCIES
   bapp_models!
   bundler (~> 1.14)
+  ethereum!
   rake (~> 10.0)
   rspec (~> 3.0)
 
 BUNDLED WITH
-   1.14.6
+   1.15.1
