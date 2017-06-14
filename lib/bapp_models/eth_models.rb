@@ -3,6 +3,7 @@ require 'oj'
 require 'inflecto'
 
 require_relative 'eth_models/utils'
+require_relative 'eth_models/json_parsing'
 require_relative 'eth_models/mixin'
 require_relative 'eth_models/ext'
 

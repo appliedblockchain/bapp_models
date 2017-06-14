@@ -1,6 +1,7 @@
 module BAppModels
   module EthModelExt
     include EthModelUtils
+    include JSONParsing
 
     def all
       1.upto(count).map do |entry_id|
@@ -41,21 +42,6 @@ module BAppModels
       SETH["#{resource}:count"] = count + 1
     end
 
-    # ---
-
-    JSONParseError = Class.new RuntimeError
-
-    def json_load(string)
-      Oj.load string
-    rescue Oj::ParseError => err
-      puts "Error parsing JSON #{err}"
-      raise JSONParseError, "Couldn't parse JSON - json: #{string.inspect}"
-    end
-
-    def json_dump(data)
-      Oj.dump data
-      # TODO rescue dump error (circular reference... etc)
-    end
 
     # utils - todo: dry with privacy_ec utils?
 
