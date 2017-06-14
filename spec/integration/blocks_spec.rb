@@ -91,10 +91,6 @@ RSpec.describe Blocks do
   end
 
   specify "decode and decrypt transaction" do
-    # block = Blocks.all.last
-    # txs = block.fetch :transactions
-    # tx = txs.first
-
     tx = STATE[:tx]
 
     tx_data = Blocks::Transaction.read tx: tx, format: :kv_hash_decrypted
@@ -113,4 +109,27 @@ RSpec.describe Blocks do
     value[:hash].should eq "baz"
   end
 
+  specify "setup - updates last block with a predictable transaction" do
+    value = { id: 1, name: "foo", hash: "baz" }
+    value = Oj.dump value
+    # SKIP encryption
+    RPC.set contract: :key_value, method: :set, params: ["documents:1", value]
+  end
+
+  specify "setup - gets TX (again)" do
+    block = Blocks.all.last
+    txs = block.fetch :transactions
+    tx = txs.first
+    STATE[:tx] = tx
+  end
+
+  specify "decode and decrypt transaction - handle failures" do
+    tx = STATE[:tx]
+    tx_data = Blocks::Transaction.read tx: tx, format: :kv_hash_decrypted
+    tx_data.should have_key :values
+    values = tx_data[:values]
+    value = values[:"documents:1"]
+    value.should be_a Hash
+    value.should be_empty
+  end
 end

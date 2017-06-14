@@ -115,8 +115,9 @@ class Blocks
 
       def decrypt_tx_value_safe(value)
         decrypt_tx_value value
-      # rescue
-
+      # TODO: raise (and catch) a more specific exception from PrivacyEC#decode_hex & #encode_hex
+      rescue TypeError
+        "{}"
       end
 
       def decrypt_tx_value(value)
