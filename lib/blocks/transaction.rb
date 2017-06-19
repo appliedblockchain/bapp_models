@@ -2,6 +2,12 @@ class Blocks
 
   module Transaction
 
+    class NilTransactionDetails
+    end
+
+    class AlienContractDeployedException < Exception
+    end
+
     def read(tx:, format: :new)
       input     = tx["input"]
       method_id = input[0..9]
@@ -15,8 +21,12 @@ class Blocks
       when :kv_hash
         rearrange_values_kv meth[:values]
       when :kv_hash_decrypted
-        values = rearrange_values_kv meth[:values]
-        decrypt_tx_values values
+        unless meth[:deployment]
+          values = rearrange_values_kv meth[:values]
+          decrypt_tx_values values
+        else
+          NilTransactionDetails.new
+        end
       else
         raise "Block::Transaction#read :format does NOT match - format: #{format.inspect} - accepted values: [:original, :new, :kv_hash, :kv_hash_decrypted]"
       end
@@ -52,7 +62,12 @@ class Blocks
           end
         end
 
-        if meth
+        if method_id == "0x60606040"
+          {
+            method_id: method_id,
+            deployment: true
+          }
+        elsif meth
           {
             method_id: method_id,
             name:      meth["name"],
@@ -60,7 +75,8 @@ class Blocks
             contract:  meth[:contract],
           }
         else
-          raise "TODO: nilobject method not found"
+          raise method_id
+          AlienContractDeployedException.new("nil object method not found")
         end
       end
 
@@ -90,6 +106,8 @@ class Blocks
       def rearrange_values(values)
         hash = {}
         values.each do |value|
+          puts value.class
+          puts value
           key = value.fetch :name
           hash[key.to_sym] = value.fetch :value
         end
@@ -136,12 +154,3 @@ class Blocks
   end
 
 end
-
-# usage (decode and decrypt all the transactions of the latest block):
-#
-# block = Blocks.all.last
-# txs = block.fetch :transactions
-# for tx in txs
-#   tx_data = Blocks::Transaction.read tx: tx, format: :kv_hash_decrypted
-#   puts tx_data
-# end
