@@ -1,2 +1,4 @@
 .rspec_status
 *.rdb
+Gemfile.lock
+spec/integration/config/contracts/*.json

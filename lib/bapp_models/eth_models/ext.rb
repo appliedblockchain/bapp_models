@@ -1,7 +1,7 @@
-
 module BAppModels
   module EthModelExt
     include EthModelUtils
+    include JSONParsing
 
     def all
       1.upto(count).map do |entry_id|
@@ -16,7 +16,8 @@ module BAppModels
     def get(id)
       data = ETH["#{resource}:#{id}"]
       return unless data
-      data = Oj.load data
+      data = PrivacyEC.decrypt data
+      data = json_load data
       new data
     end
 
@@ -24,7 +25,8 @@ module BAppModels
       id = incr
       attrs.merge! id: id
       obj  = new attrs
-      data = Oj.dump obj.attributes
+      data = json_dump obj.attributes
+      data = PrivacyEC.encrypt data
       ETH["#{resource}:#{id}"] = data
       obj
     end
@@ -39,5 +41,15 @@ module BAppModels
     def incr
       SETH["#{resource}:count"] = count + 1
     end
+
+
+    # utils - todo: dry with privacy_ec utils?
+
+    def decode_hex(str)
+      raise TypeError, "Value must be an instance of string" unless str.instance_of?(String)
+      raise TypeError, 'Non-hexadecimal digit found' unless str =~ /\A[0-9a-fA-F]*\z/
+      [str].pack("H*")
+    end
+
   end
 end
