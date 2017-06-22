@@ -36,6 +36,16 @@ module BAppModels
       resource.update attrs
     end
 
+    def find(search_options)
+      models = self.class.all
+      models.find do |model|
+        search_options.keys.each do |so_key|
+          return false unless contract[so_key] == search_options[so_key]
+        end
+        true
+      end
+    end
+
     private
 
     def incr
