@@ -69,7 +69,25 @@ module BAppModels
       end
     end
 
+    def has_many(model_name)
+      # define getter
+      define_method model_name do
+        potential_relatives = Object.const_get(self.class.sym_to_model_name(model_name)).all
+        relatives = []
+        search_attribute = "#{self.class.model_name_underscore(self.class.to_s)}_id"
+        potential_relatives.each do |pr|
+          if pr[search_attribute] == self.id
+            relatives << pr
+          end
+        end
+      end
+    end
+
     public
+    def model_name_underscore(model_name)
+      model_name.scan(/[A-Z][^A-Z]*/).map{|name_el| name_el.downcase }.join("_")
+    end
+
     def sym_to_model_name(sym)
       sym.to_s.split("_").map{|name_el| name_el.capitalize}.join("")
     end
