@@ -63,18 +63,17 @@ module BAppModels
 
     protected
     def belongs_to(model_name)
-      # define getter
       define_method model_name do
-        Object.const_get(self.class.sym_to_model_name(model_name)).get self["#{model_name}_id"]
+        Object.const_get(Inflecto.camelize(model_name.to_s)).get self["#{model_name}_id"]
       end
     end
 
-    def has_many(model_name)
-      # define getter
-      define_method model_name do
-        potential_relatives = Object.const_get(self.class.sym_to_model_name(model_name)).all
+    def has_many(model_name_plural)
+      model_name = Inflecto.singularize(model_name_plural)
+      define_method model_name_plural do
+        potential_relatives = Object.const_get(Inflecto.camelize(model_name.to_s)).all
         relatives = []
-        search_attribute = "#{self.class.model_name_underscore(self.class.to_s)}_id"
+        search_attribute = "#{Inflecto.underscore(self.class.to_s)}_id"
         potential_relatives.each do |pr|
           if pr[search_attribute] == self.id
             relatives << pr
@@ -82,15 +81,5 @@ module BAppModels
         end
       end
     end
-
-    public
-    def model_name_underscore(model_name)
-      model_name.scan(/[A-Z][^A-Z]*/).map{|name_el| name_el.downcase }.join("_")
-    end
-
-    def sym_to_model_name(sym)
-      sym.to_s.split("_").map{|name_el| name_el.capitalize}.join("")
-    end
-
   end
 end
