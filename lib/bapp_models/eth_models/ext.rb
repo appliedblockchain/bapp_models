@@ -9,6 +9,14 @@ module BAppModels
       end
     end
 
+    def first
+      get 1
+    end
+
+    def last
+      get count
+    end
+
     def count
       ( SETH["#{resource}:count"] || 0 ).to_i
     end
