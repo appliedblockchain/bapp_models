@@ -61,5 +61,18 @@ module BAppModels
       [str].pack("H*")
     end
 
+    protected
+    def has_one(model_name)
+      # define getter
+      define_method model_name do
+        Object.const_get(self.class.sym_to_model_name(model_name)).get self["#{model_name}_id"]
+      end
+    end
+
+    public
+    def sym_to_model_name(sym)
+      sym.to_s.split("_").map{|name_el| name_el.capitalize}.join("")
+    end
+
   end
 end
