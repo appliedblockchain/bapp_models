@@ -1,6 +1,7 @@
 # exposes a key-value owner contract access by mimicking the redis API
 
 require 'redis'
+require 'base64'
 
 # use ethereum (key value / KVOwner contracts) as you use redis:
 #
@@ -52,7 +53,12 @@ module BAppModels
         raise "ABI::DecodingError - Unable to decode value from ethereum - contract: #{@contract.inspect}, key: #{key.inspect} - EthereumABI::ABI::DecodingError"
       end
       log "GET result: #{value.inspect} (Base64)" if @log
-      # optional gzip here
+      if ENV["GZIP"] == "1"
+        return nil if value.empty?
+        value = Base64.strict_decode64 value
+        return nil if value.empty?
+        value = Zlib::Inflate.inflate value
+      end
       return nil if value.empty?
       log "GET result: #{value.inspect}" if @log
       value
@@ -63,7 +69,10 @@ module BAppModels
       log "SET: #{key.inspect}: #{value.inspect[0..100]} #{value.inspect.size > 99 ? "(...)" : "" }" if @log
       @redis[key] = "1" if ETH_KV_REDIS
       value = value.to_s
-      # optional gzip here
+      if ENV["GZIP"] == "1"
+        value = Zlib::Deflate.deflate value
+        value = Base64.strict_encode64 value
+      end
       log "SET (raw): #{key.inspect}: #{value}" if @log
       RPC.set contract: @contract, method: :set, params: [key, value]
       true
