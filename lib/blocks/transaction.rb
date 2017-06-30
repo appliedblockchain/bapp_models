@@ -23,7 +23,12 @@ class Blocks
       when :kv_hash_decrypted
         unless meth[:deployment]
           values = rearrange_values_kv meth[:values]
-          decrypt_tx_values values
+          if KV_MULTI
+            kv_multi_get_and_decrypt values: values
+          else
+            # just decrypt
+            decrypt_tx_values values
+          end
         else
           NilTransactionDetails.new
         end
@@ -40,6 +45,24 @@ class Blocks
     module ModuleMethods
 
       include Ethereum::Formatting
+
+      def kv_multi_get_and_decrypt(values:)
+        # assume we get only 1 key/value pair
+        key   = values.keys.first
+        value = values.values.first
+
+        return({ key => NilTransactionDetails.new }) if key =~ /:multi_kv:[1-9]\d*$/
+        # value = fetch_multi values: values
+
+        values = kv_multi_get key: key
+        value  = values.join ""
+        decrypt_tx_values( key => value )
+      end
+
+      def kv_multi_get(key:)
+        # TODO
+        ["{}"]
+      end
 
       def tx_method_details(input:, method_id:)
         values   = input
