@@ -93,7 +93,7 @@ module BAppModels
 
     # SET (sendTransaction)
 
-    TX_SIZE = 500  # CONSERVATIVE
+    TX_SIZE = 400  # CONSERVATIVE
 
     if RACK_ENV == "test"
       send :remove_const, :TX_SIZE
