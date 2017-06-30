@@ -1,3 +1,6 @@
+ENV["RACK_ENV"] = "test"
+ENV["KV_MULTI"] = "1"
+
 require "bundler/setup"
 require "bapp_models"
 

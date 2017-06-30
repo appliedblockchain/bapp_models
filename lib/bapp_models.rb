@@ -1,3 +1,5 @@
+require_relative 'env'
+
 require "bapp_models/version"
 require "bapp_models/eth_kv"
 require "bapp_models/eth_models"
