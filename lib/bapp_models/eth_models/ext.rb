@@ -32,10 +32,12 @@ module BAppModels
     def create(attrs)
       id = incr
       attrs.merge! id: id
+      attrs = before_create(attrs) if self.respond_to?(:before_create)
       obj  = new attrs
       data = json_dump obj.attributes
       data = PrivacyEC.encrypt data
       ETH["#{resource}:#{id}"] = data
+      
       obj
     end
 
