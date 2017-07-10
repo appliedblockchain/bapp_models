@@ -49,7 +49,7 @@ module BAppModels
       value = get_value key: key
       log "GET result: #{value.inspect} (Base64)" if @log
       value = get_value_gzip value if ENV["GZIP"] == "1"
-      return nil if value.empty?
+      return nil if value.nil? || value.empty?
       log "GET result: #{value.inspect}" if @log
       value
     end
