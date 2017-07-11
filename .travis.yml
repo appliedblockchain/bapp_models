@@ -1,0 +1,3 @@
+language: ruby
+dist: trusty
+script: bundle exec rspec spec/*_spec.rb
