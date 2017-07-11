@@ -3,3 +3,12 @@ dist: trusty
 script: bundle exec rspec spec/*_spec.rb
 notifications:
   slack: appliedblockchain:fe99Xu0TIlYybDwmQ27zN7lG
+before_install: ./spec/ci/install_secp.sh
+addons:
+  apt:
+    packages:
+      - libtool
+env:
+  global:
+    - LD_RUN_PATH=$HOME
+    - LD_LIBRARY_PATH=$HOME
