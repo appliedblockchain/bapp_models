@@ -1,0 +1,5 @@
+language: ruby
+dist: trusty
+script: bundle exec rspec spec/*_spec.rb
+notifications:
+  slack: appliedblockchain:fe99Xu0TIlYybDwmQ27zN7lG
