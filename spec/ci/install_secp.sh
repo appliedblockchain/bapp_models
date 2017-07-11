@@ -1,7 +1,7 @@
 set -x
 set -e
 
-# sudo apt-get install -y libtool # already present on circle
+# sudo apt-get install -y libtool # already present on circle/travis
 
 mkdir ~/tmp -p
 cd ~/tmp
