@@ -46,17 +46,22 @@ module BAppModels
       resource.update attrs
     end
 
+    def where(search_options)
+      all().find_all {|model| matching?(search_options, model)}
+    end
+
     def find(search_options)
-      models = self.class.all
-      models.find do |model|
-        search_options.keys.each do |so_key|
-          return false unless contract[so_key] == search_options[so_key]
-        end
-        true
-      end
+      all().find {|model| matching?(search_options, model)}
     end
 
     private
+
+    def matching?(search_options, access)
+      search_options.keys.each do |so_key|
+        return false if access[so_key] != search_options[so_key]
+      end
+      true
+    end
 
     def incr
       SETH["#{resource}:count"] = count + 1
