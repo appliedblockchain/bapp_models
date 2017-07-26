@@ -1,3 +1,4 @@
+module BAppModels
   module EthModelExt
     include EthModelUtils
     include JSONParsing
