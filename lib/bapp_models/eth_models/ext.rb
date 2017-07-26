@@ -1,4 +1,3 @@
-module BAppModels
   module EthModelExt
     include EthModelUtils
     include JSONParsing
@@ -6,7 +5,7 @@ module BAppModels
     def all
       1.upto(count).map do |entry_id|
         get entry_id
-      end
+      end.compact
     end
 
     def first
@@ -24,9 +23,13 @@ module BAppModels
     def get(id)
       data = ETH["#{resource}:#{id}"]
       return unless data
-      data = PrivacyEC.decrypt data
-      data = json_load data
-      new data
+      begin
+        data = PrivacyEC.decrypt data
+        data = json_load data
+        new data
+      rescue ECC_Crypto::DecryptionError => e
+        return
+      end
     end
 
     def create(attrs)
