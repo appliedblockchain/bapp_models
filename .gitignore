@@ -1,2 +1,3 @@
 .rspec_status
 *.rdb
+spec/integration/config/contracts/*.json
