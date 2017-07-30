@@ -53,7 +53,7 @@ module BAppModels
       end
       log "GET result: #{value.inspect} (Base64)" if @log
       # optional gzip here
-      return nil if value.empty?
+      return nil if !value || value.empty?
       log "GET result: #{value.inspect}"
       value
     end
