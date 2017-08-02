@@ -1,6 +1,5 @@
 module BAppModels
   module EthModelMixin
-
     include JSONParsing
 
     def save
@@ -11,7 +10,7 @@ module BAppModels
       end
     end
 
-    def update(attrs_new)
+    def update(attrs_new, seth)
       klass = self.class
       model = klass.get id
       attrs = model.attributes
@@ -19,10 +18,11 @@ module BAppModels
       data  = json_dump attrs
       obj   = klass.new attrs
 
-      SETH["#{self.class.resource}:#{id}:addresses"].each do |address|
-        public_key = SETH ["public_key:#{address}"]
+      addresses = json_load(SETH["#{self.class.resource}:#{id}:addresses"])
+      addresses.each do |address|
+        public_key = SETH["public_key:#{address}"]
         data = PrivacyEC.encrypt data, public_key: public_key
-        ETH["#{resource}:#{id}:address:#{address}"] = data
+        ETH["#{self.class.resource}:#{id}:address:#{address}"] = data
       end
 
       obj
