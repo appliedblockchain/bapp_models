@@ -59,6 +59,10 @@ module BAppModels
     def share(id, raw_public_key)
       public_key = PrivacyEC.pubkey_to_ec_pubkey raw_public_key
       address = PrivacyEC.pub_to_address(public_key)
+      
+      data = PrivacyEC.encrypt data, public_key: public_key
+      ETH["#{resource}:#{id}:address:#{address}"] = data
+      
       SETH["public_key:#{address}"] = public_key
       shared_addresses = json_load SETH["#{resource}:#{id}:addresses"]
       shared_addresses.push(address)
