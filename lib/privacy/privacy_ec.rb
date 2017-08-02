@@ -57,7 +57,12 @@ class PrivacyEC
     # utils
 
     def sha(value)
-      SHA.hexdigest value
+      SHA.hexdigest 256, value
+    end
+
+    def pub_to_address(public_key)
+      address_bytes = ECC_Crypto.keccak256(public_key[1..-1])[-20..-1]
+      "0x#{encode_hex address_bytes}"
     end
 
     protected

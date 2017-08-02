@@ -17,9 +17,14 @@ module BAppModels
       attrs = model.attributes
       attrs.merge! attrs_new
       data  = json_dump attrs
-      data = PrivacyEC.encrypt data
       obj   = klass.new attrs
-      ETH["#{self.class.resource}:#{id}"] = data
+
+      SETH["#{self.class.resource}:#{id}:addresses"].each do |address|
+        public_key = SETH ["public_key:#{address}"]
+        data = PrivacyEC.encrypt data, public_key: public_key
+        ETH["#{resource}:#{id}:address:#{address}"] = data
+      end
+
       obj
     end
 
