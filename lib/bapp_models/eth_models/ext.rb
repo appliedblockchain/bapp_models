@@ -22,7 +22,7 @@ module BAppModels
     end
 
     def get(id)
-      public_key = PrivacyEC.pubkey_to_ec_pubkey str_public_key
+      public_key = PrivacyEC.own_public_key_ec
       address = PrivacyEC.pub_to_address(public_key)
       puts address
       data = ETH["#{resource}:#{id}:address:#{address}"]
