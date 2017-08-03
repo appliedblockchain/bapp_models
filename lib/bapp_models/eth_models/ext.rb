@@ -21,7 +21,7 @@ module BAppModels
       ( SETH["#{resource}:count"] || 0 ).to_i
     end
 
-    def get(id, str_public_key=PrivacyEC.own_public_key)
+    def get(id, str_private_key=PrivacyEC.private_key_wrap)
       public_key = PrivacyEC.pubkey_to_ec_pubkey str_public_key
       address = PrivacyEC.pub_to_address(public_key)
       puts address
@@ -56,8 +56,8 @@ module BAppModels
       obj
     end
 
-    def share(id, raw_public_key)
-      public_key = PrivacyEC.pubkey_to_ec_pubkey raw_public_key
+    def share(id, str_public_key)
+      public_key = PrivacyEC.pubkey_to_ec_pubkey str_public_key
       address = PrivacyEC.pub_to_address(public_key)
       SETH["public_key:#{address}"] = public_key
       shared_addresses = json_load SETH["#{resource}:#{id}:addresses"]
@@ -69,7 +69,7 @@ module BAppModels
 
     def update(id, attrs)
       resource = get id
-      resource.update attrs, SETH
+      resource.update attrs
     end
 
     def where(search_options)

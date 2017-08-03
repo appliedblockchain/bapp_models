@@ -10,7 +10,7 @@ module BAppModels
       end
     end
 
-    def update(attrs_new, seth)
+    def update(attrs_new)
       klass = self.class
       model = klass.get id
       attrs = model.attributes
@@ -21,8 +21,8 @@ module BAppModels
       addresses = json_load(SETH["#{self.class.resource}:#{id}:addresses"])
       addresses.each do |address|
         public_key = SETH["public_key:#{address}"]
-        data = PrivacyEC.encrypt data, public_key: public_key
-        ETH["#{self.class.resource}:#{id}:address:#{address}"] = data
+        enc_data = PrivacyEC.encrypt data, public_key: public_key
+        ETH["#{self.class.resource}:#{id}:address:#{address}"] = enc_data
       end
 
       obj
