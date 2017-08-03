@@ -21,7 +21,7 @@ module BAppModels
       ( SETH["#{resource}:count"] || 0 ).to_i
     end
 
-    def get(id, str_private_key=PrivacyEC.private_key_wrap)
+    def get(id)
       public_key = PrivacyEC.pubkey_to_ec_pubkey str_public_key
       address = PrivacyEC.pub_to_address(public_key)
       puts address
