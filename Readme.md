@@ -69,22 +69,25 @@ Refer to Virtus documentation (https://github.com/solnic/virtus) for more infos 
 
 
 
-## Default CRU API (w/ external key)
+## Default CRU API (w/ external signed message for Create and Update)
 
 ```rb
+# sigd is the "signed message"
+sigd = { hash: "...", sig: "...", address: "..." }
+
 # replace Model with the name of your model
 
 Model.get id: 1 #=> returns an object instance (gets it from ethereum) - note this differs from the default one so you can override the model to pass finders ( for example passing { name: "" }, so you don't need to implement find_by_name or similar methods )
 
 Model.all #=> returns an array of Model object instances
 
-Model.create({}) #=> creates an entry in ethereum
+Model.create({}, sigd: sigd) #=> creates an entry in ethereum
 
 # the default update is the .save in the model itself
 
 object = Model.get id: 1
 object.name "Foobar"
-object.save # this calls an update of the model data
+object.save sigd: sigd # this calls an update of the model data
 ```
 
 On the contract side we use these kind of methods (basically a key/value API):
