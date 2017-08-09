@@ -13,9 +13,9 @@ EthModel has an API which is very similar to the popular ActiveModel api, except
 
 EthModel provides you with a simple CRU (crud without delete - create read update)
 
+## Default CRU API
+
 ```rb
-# Sample CRU API
-#
 # replace Model with the name of your model
 
 Model.get 1 #=> returns an object instance (gets it from ethereum)
@@ -25,8 +25,12 @@ Model.all #=> returns an array of Model object instances
 Model.create({}) #=> creates an entry in ethereum
 
 Model.update(1, {}) #=> updates a record in ethereum
+```
 
-# model definition
+### Model definition
+
+```rb
+
 
 class Document < EthModel
   eth_model
@@ -40,9 +44,11 @@ class Document < EthModel
     self.hash = contents.reverse
   end
 end
+```
 
-# Sample Model Usage
+### Sample Model Usage
 
+```rb
 doc = Document.new name: "Foo", contents: "Bar123"
 doc.name      #=> "foo"
 doc.calc_hash #=> "..."
@@ -59,6 +65,61 @@ doc.name #=> "foo"
 EthModel is an extension built on top of Virtus. Thanks to Virtus we can add new features like relationsips, constraints, validations, observable hooks/attributes and many more features easily in the future.
 
 Refer to Virtus documentation (https://github.com/solnic/virtus) for more infos on attributes/types/etc.
+
+
+
+
+## Default CRU API (w/ external key)
+
+```rb
+# replace Model with the name of your model
+
+Model.get id: 1 #=> returns an object instance (gets it from ethereum) - note this differs from the default one so you can override the model to pass finders ( for example passing { name: "" }, so you don't need to implement find_by_name or similar methods )
+
+Model.all #=> returns an array of Model object instances
+
+Model.create({}) #=> creates an entry in ethereum
+
+# the default update is the .save in the model itself
+
+object = Model.get id: 1
+object.name "Foobar"
+object.save # this calls an update of the model data
+```
+
+On the contract side we use these kind of methods (basically a key/value API):
+
+
+```js
+getFull()
+getValue()
+
+create()
+update()
+```
+
+
+We always pass to every method the 3 required **ECVerify** arguments:
+
+```js
+
+// client:
+hash = computeHash hash
+signature = sign(hash)
+
+// chain:
+(hash, signature, address)
+
+```
+
+essentially verifies that the owner of the data (because the signature matches the hash of the message, we can verify)
+
+---
+
+Please see `appliedblockchain/cygnetise_models` and `appliedblockchain/cygnetise_contracts` repositories to see a live example of this API.
+
+
+
 
 ## EthKV
 
@@ -81,8 +142,6 @@ ETH["foo"]            #=> "bar"
 ETH.set "foo", "baz"  #=> true
 ETH["foo"] = "baz"
 ```
-
-For now there are only two main ETH APIs but more will come.
 
 Remember that if you need to call Ethereum contract methods directly you can use the RPC api straight away - take a look here for more infos: https://github.com/appliedblockchain/ethereum
 
