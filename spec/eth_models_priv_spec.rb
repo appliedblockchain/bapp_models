@@ -33,7 +33,7 @@ RSpec.describe EthModel do
     Keychain.current.public_key.should_not == key
   end
 
-  specify "model attributes" do
+  xspecify "model attributes" do
     doc = Document.new
     doc.name.should be_nil
     doc.name = "test"

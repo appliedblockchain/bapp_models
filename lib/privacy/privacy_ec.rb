@@ -25,11 +25,11 @@ class PrivacyEC
 
   module ClassMethods
 
-    def decrypt(encrypted_value)
+    def decrypt(encrypted_value, private_key=Keychain.current.private_key)
       log "DECRYPT: #{encrypted_value.inspect}"
       encrypted_value = decode_hex encrypted_value
       log "DECRYPT (decoded): #{encrypted_value.inspect}"
-      key_ecc = private_key_wrap
+      key_ecc = private_key_wrap(private_key)
       value = key_ecc.ecies_decrypt encrypted_value
       log "DECRYPT (decrypted value): #{value.inspect}"
       value = decode_hex value
@@ -67,8 +67,7 @@ class PrivacyEC
 
     protected
 
-    def private_key_wrap
-      private_key = Keychain.current.private_key
+    def private_key_wrap(private_key)
       ECC_Crypto::ECCx.new decode_hex private_key
     end
 
