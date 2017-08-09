@@ -96,7 +96,7 @@ RSpec.describe EthModel do
   end
 
   describe "share" do
-    specify "when one key creates a model it should be nil for others until shared using their public key", :focus => true do
+    specify "when one key creates a model it should be nil for others until shared using their public key" do
       kc_a = Keychain.send(:new, Keychain.generate)
       kc_b = Keychain.send(:new, Keychain.generate)
       # Set out current keychain to kc_a
