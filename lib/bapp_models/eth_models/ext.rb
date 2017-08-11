@@ -24,7 +24,6 @@ module BAppModels
     def get(id)
       public_key = PrivacyEC.own_public_key_ec
       address = PrivacyEC.pub_to_address(public_key)
-      puts address
       data = ETH["#{resource}:#{id}:address:#{address}"]
       return unless data
       begin
