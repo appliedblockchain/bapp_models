@@ -90,7 +90,7 @@ RSpec.describe Blocks do
     STATE[:tx] = tx
   end
 
-  specify "decode and decrypt transaction" do
+  xspecify "decode and decrypt transaction" do
     tx = STATE[:tx]
 
     tx_data = Blocks::Transaction.read tx: tx, format: :kv_hash_decrypted

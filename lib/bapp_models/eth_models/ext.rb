@@ -22,7 +22,9 @@ module BAppModels
     end
 
     def get(id)
-      data = ETH["#{resource}:#{id}"]
+      public_key = PrivacyEC.own_public_key_ec
+      address = PrivacyEC.pub_to_address(public_key)
+      data = ETH["#{resource}:#{id}:address:#{address}"]
       return unless data
       begin
         data = PrivacyEC.decrypt data
@@ -33,16 +35,35 @@ module BAppModels
       end
     end
 
-    def create(attrs)
+    def create(attrs, str_public_key=PrivacyEC.own_public_key)
       id = incr
       attrs.merge! id: id
       attrs = before_create(attrs) if self.respond_to?(:before_create)
       obj  = new attrs
       data = json_dump obj.attributes
-      data = PrivacyEC.encrypt data
-      ETH["#{resource}:#{id}"] = data
+      
+      public_key = PrivacyEC.pubkey_to_ec_pubkey str_public_key
+
+      data = PrivacyEC.encrypt data, public_key: public_key
+
+      address = PrivacyEC.pub_to_address(public_key)
+      ETH["#{resource}:#{id}:address:#{address}"] = data
+
+      SETH["public_key:#{address}"] = public_key
+      SETH["#{resource}:#{id}:addresses"] = json_dump [address]
       
       obj
+    end
+
+    def share(id, str_public_key)
+      public_key = PrivacyEC.pubkey_to_ec_pubkey str_public_key
+      address = PrivacyEC.pub_to_address(public_key)
+      SETH["public_key:#{address}"] = public_key
+      shared_addresses = json_load SETH["#{resource}:#{id}:addresses"]
+      shared_addresses.push(address)
+      SETH["#{resource}:#{id}:addresses"] = json_dump shared_addresses
+      update(id, {})
+      shared_addresses
     end
 
     def update(id, attrs)

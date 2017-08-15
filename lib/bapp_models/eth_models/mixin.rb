@@ -1,6 +1,5 @@
 module BAppModels
   module EthModelMixin
-
     include JSONParsing
 
     def save
@@ -17,9 +16,15 @@ module BAppModels
       attrs = model.attributes
       attrs.merge! attrs_new
       data  = json_dump attrs
-      data = PrivacyEC.encrypt data
       obj   = klass.new attrs
-      ETH["#{self.class.resource}:#{id}"] = data
+
+      addresses = json_load(SETH["#{self.class.resource}:#{id}:addresses"])
+      addresses.each do |address|
+        public_key = SETH["public_key:#{address}"]
+        enc_data = PrivacyEC.encrypt data, public_key: public_key
+        ETH["#{self.class.resource}:#{id}:address:#{address}"] = enc_data
+      end
+
       obj
     end
 

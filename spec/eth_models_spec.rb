@@ -54,8 +54,10 @@ RSpec.describe EthModel do
   describe "CRUD" do
 
     specify "create" do
-      Document.create name: "foo", contents: "bar"
-      Document.create name: "baz", contents: "123"
+      doc_a = Document.create name: "foo", contents: "bar"
+      doc_b = Document.create name: "baz", contents: "123"
+      doc_a.name.should == "foo"
+      doc_b.contents.should == "123"
     end
 
     specify "all" do
@@ -91,6 +93,26 @@ RSpec.describe EthModel do
     xspecify "save" do
       # TODO: spec save
     end
+  end
 
+  describe "share" do
+    specify "when one key creates a model it should be nil for others until shared using their public key" do
+      kc_a = Keychain.send(:new, Keychain.generate)
+      kc_b = Keychain.send(:new, Keychain.generate)
+      # Set out current keychain to kc_a
+      allow(Keychain).to receive(:current).and_return kc_a
+      doc_id = Document.create(name: "abc").id
+      Document.get(doc_id).name.should == "abc"
+      # Switch keychain.current to kc_b
+      allow(Keychain).to receive(:current).and_return kc_b
+      Document.get(doc_id).should be_nil
+      # Switch Keychain.current back to kc_a
+      allow(Keychain).to receive(:current).and_return kc_a
+      # share with kc_b
+      Document.share(doc_id, kc_b.public_key)
+      # Switch Keychain.current to kc_b
+      allow(Keychain).to receive(:current).and_return kc_b
+      Document.get(doc_id).name.should == "abc"
+    end
   end
 end
