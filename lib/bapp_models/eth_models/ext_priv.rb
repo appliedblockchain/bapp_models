@@ -2,7 +2,9 @@ module BAppModels
   module EthModelExtPriv
 
     def get_raw(id)
-      data = ETH["#{resource}:#{id}"]
+      public_key = PrivacyEC.own_public_key_ec
+      address = PrivacyEC.pub_to_address(public_key)
+      data = ETH["#{resource}:#{id}:address:#{address}"]
       return unless data
       decode_hex data
       initialize_raw data
