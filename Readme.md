@@ -7,6 +7,7 @@ You can use BAppModel's two APIs / models flavours:
 - EthModel
 - EthKV
 
+
 ## EthModel
 
 EthModel has an API which is very similar to the popular ActiveModel api, except that every time you trigger a save, the data is stored in Ethereum.

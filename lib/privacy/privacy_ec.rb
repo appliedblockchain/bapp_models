@@ -65,6 +65,12 @@ class PrivacyEC
       "0x#{encode_hex address_bytes}"
     end
 
+    def pub_to_address(hex)
+      bytes = decode_hex hex
+      address_bytes = ECC_Crypto.keccak256(bytes[1..-1])[-20..-1]
+      "0x#{encode_hex address_bytes}"
+    end
+
     protected
 
     def private_key_wrap(private_key)
