@@ -1,7 +1,7 @@
-# set -x
-set -e
+set -x
+# set -e
 
-cd ~/tmp
+mkdir -p ~/tmp && cd ~/tmp
 
 # this requires sudo unfortunately
 wget http://parity-downloads-mirror.parity.io/v1.3.10/x86_64-unknown-linux-gnu/parity_1.3.10_amd64.deb && sudo dpkg -i parity_1.7.0_amd64.deb
