@@ -1,10 +1,14 @@
 language: ruby
 dist: trusty
 script: bundle exec rspec spec/*_spec.rb
+sudo: required
 notifications:
   slack: appliedblockchain:fe99Xu0TIlYybDwmQ27zN7lG
-before_install: ./spec/ci/install_secp.sh
+before_install:
+  - ./spec/ci/setup_parity.sh
+  - ./spec/ci/install_secp.sh
 env:
   global:
-    - LD_RUN_PATH=$HOME
-    - LD_LIBRARY_PATH=$HOME
+    - LD_RUN_PATH=$HOME/lib
+    - LD_LIBRARY_PATH=$HOME/lib
+    - C_INCLUDE_PATH=$HOME/secp256k1/include

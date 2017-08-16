@@ -3,8 +3,7 @@ set -e
 
 # sudo apt-get install -y libtool # already present on circle/travis
 
-mkdir ~/tmp -p
-cd ~/tmp
+cd ~/
 
 # skipping build and make for CI speed up
 if [ ! -d secp256k1 ]; then
