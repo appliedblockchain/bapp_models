@@ -8,7 +8,11 @@ wget http://parity-downloads-mirror.parity.io/v1.3.10/x86_64-unknown-linux-gnu/p
 
 npm i -g pm2
 
+cd ~/
+
 git clone https://$GH_TOKEN@github.com/appliedblockchain/bapp_parity.git && cd bapp_parity
+
+mkdir -p ~/.parity/keys && cp -R tmp/keys_dev/*  ~/.parity/keys
 
 # install dependencies
 ./bin/setup
@@ -17,6 +21,8 @@ git clone https://$GH_TOKEN@github.com/appliedblockchain/bapp_parity.git && cd b
 
 # deploy
 ./bin/setup
+
+cd $TRAVIS_BUILD_DIR
 
 # copy contract configs
 cp -r ../bapp_parity/config/contracts/* spec/integration/config/contracts/
