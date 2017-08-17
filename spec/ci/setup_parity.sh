@@ -25,4 +25,4 @@ mkdir -p ~/.parity/keys && cp -R tmp/keys_dev/*  ~/.parity/keys
 cd $TRAVIS_BUILD_DIR
 
 # copy contract configs
-cp -r ../bapp_parity/config/contracts/* spec/integration/config/contracts/
+cp -r ~/bapp_parity/config/contracts/* spec/integration/config/contracts/
